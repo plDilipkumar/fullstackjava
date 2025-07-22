@@ -1,0 +1,201 @@
+
+# 🌟 **Day 7 – Java OOP Concepts & Git Basics**
+
+
+## 🔷 **1. Class & Object**
+
+* **Class:** Blueprint/template for objects.
+* **Object:** Real-world entity created from class.
+
+```java
+class Car {
+    String brand = "Toyota";
+    void start() { System.out.println(brand + " is starting..."); }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car myCar = new Car();
+        myCar.start();
+    }
+}
+```
+
+---
+
+## 🔷 **2. Constructors**
+
+* **Default Constructor:** No parameters.
+* **Parameterized Constructor:** Accepts parameters.
+
+```java
+class Student {
+    String name; int age;
+
+    Student() { name="Unknown"; age=0; }
+    Student(String n, int a) { name=n; age=a; }
+
+    void display() { System.out.println(name + " - " + age); }
+}
+```
+
+---
+
+## 🔷 **3. this keyword**
+
+* Refers to **current class object** to resolve ambiguity.
+
+```java
+class Demo {
+    int num;
+    Demo(int num) { this.num = num; }
+}
+```
+
+---
+
+## 🔷 **4. super keyword**
+
+* Refers to **parent class members** or constructor.
+
+```java
+class Parent { void show() { System.out.println("Parent"); } }
+class Child extends Parent {
+    void show() {
+        super.show();
+        System.out.println("Child");
+    }
+}
+```
+
+---
+
+## 🔷 **5. static keyword**
+
+* Belongs to class, not object. Used for **common variables or methods**.
+
+```java
+class Example {
+    static int count = 0;
+    Example() { count++; }
+}
+```
+
+---
+
+## 🔷 **6. final keyword**
+
+* Used to create **constants**, prevent overriding, or prevent inheritance.
+
+```java
+final class A {}
+// class B extends A {} // Error
+```
+
+---
+
+## 🔷 **7. Inheritance**
+
+* Acquiring properties of parent class.
+* **Types:** Single, Multilevel, Hierarchical.
+
+```java
+class A {}
+class B extends A {}
+```
+
+---
+
+## 🔷 **8. Polymorphism**
+
+* **Method Overloading (compile-time)**
+
+```java
+int add(int a, int b) {...}
+double add(double a, double b) {...}
+```
+
+* **Method Overriding (runtime)**
+
+```java
+class Animal { void sound() {...} }
+class Dog extends Animal { void sound() {...} }
+```
+
+---
+
+## 🔷 **9. Abstraction**
+
+* **Abstract class:** Cannot be instantiated, can have abstract & concrete methods.
+
+```java
+abstract class Shape { abstract void draw(); }
+```
+
+---
+
+## 🔷 **10. Interface**
+
+* 100% abstraction. Supports multiple inheritance via `implements`.
+
+```java
+interface Flyable { void fly(); }
+class Bird implements Flyable { public void fly() {...} }
+```
+
+* **Default & static methods (Java 8 onwards)**
+
+```java
+interface A { default void show() {...} }
+```
+
+---
+
+## 🔷 **11. Encapsulation**
+
+* Wrapping data and code together using **private variables + getters/setters**.
+
+```java
+class Student {
+    private int age;
+    public void setAge(int a) { age=a; }
+    public int getAge() { return age; }
+}
+```
+
+---
+
+## 🔷 **12. Final Integrated OOP Example**
+
+```java
+interface Payable { void calculatePay(); }
+abstract class Employee {
+    private String name; private int id;
+    Employee(String n, int i) { name=n; id=i; }
+    void display() { System.out.println(name + " - " + id); }
+    abstract void work();
+}
+class Developer extends Employee implements Payable {
+    Developer(String n, int i) { super(n,i); }
+    void work() { System.out.println("Coding"); }
+    public void calculatePay() { System.out.println("Salary calculated"); }
+}
+```
+
+---
+
+## 🔷 **13. Git Basics**
+
+| **Command**               | **Purpose**      |
+| ------------------------- | ---------------- |
+| git init                  | Initialize repo  |
+| git status                | Check changes    |
+| git add .                 | Stage changes    |
+| git commit -m "msg"       | Commit changes   |
+| git log                   | View commits     |
+| git remote add origin url | Link to GitHub   |
+| git push -u origin main   | Push to GitHub   |
+| git pull origin main      | Pull from GitHub |
+| git clone url             | Clone repo       |
+
+---
