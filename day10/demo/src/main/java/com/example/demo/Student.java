@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 public class Student {
     @Id
     private int id;
+
+    @NotBlank(message = "Name cannot be blank")
     private String name;
 
     @OnetoMany(mappedBy = "student",
@@ -19,4 +21,8 @@ public class Student {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+    
+    public List<Course> getCourses() { return courses; }
+    public void setCourses(List<Course> courses) { this.courses = courses; }
+
 }

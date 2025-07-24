@@ -12,6 +12,10 @@ public class StudentService {
     private StudentRepository repo;
 
     public Student addStudent(Student s) {
+        if(s.getCourses() != null) {
+            for(Course c : s.getCourses()) {
+            c.setStudent(s);
+        }}
         return repo.save(s);
     }
 
