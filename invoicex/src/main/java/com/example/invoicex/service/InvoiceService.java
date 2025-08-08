@@ -10,6 +10,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import static com.example.invoicex.specification.InvoiceSpecification.*;
+
 
 @Service
 public class InvoiceService {
@@ -72,5 +77,18 @@ public class InvoiceService {
                 .orElseThrow(() -> new ResourceNotFoundException("Invoice not found with ID: " + id));
 
         invoiceRepository.delete(invoice);
+    }
+
+    public Page<Invoice> searchInvoices(String keyword, String status, Pageable pageable) {
+        Specification<Invoice> spec = Specification.where(null);
+
+        if (keyword != null && !keyword.isEmpty()) {
+            spec = spec.and(containsText(keyword));
+        }
+        if (status != null && !status.isEmpty()) {
+            spec = spec.and(hasStatus(status));
+        }
+
+        return invoiceRepository.findAll(spec, pageable);
     }
 }

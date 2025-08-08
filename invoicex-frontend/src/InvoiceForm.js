@@ -1,75 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import invoiceService from './InvoiceService';
-import clientService from './ClientService';
+import React, { useState } from 'react';
+import axios from 'axios';
 
 const InvoiceForm = () => {
-  const [formData, setFormData] = useState({
+  const [invoice, setInvoice] = useState({
     invoiceNumber: '',
-    issueDate: '',
-    dueDate: '',
     amount: '',
-    status: 'PENDING',
+    status: '',
     clientId: ''
   });
 
-  const [clients, setClients] = useState([]);
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    clientService.getAllClients()
-      .then((res) => setClients(res.data))
-      .catch((err) => console.error('Error fetching clients', err));
-  }, []);
-
-  const handleChange = (e) => {
-    setFormData({...formData, [e.target.name]: e.target.value });
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setInvoice({ ...invoice, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
-    try {
-      await invoiceService.createInvoice(formData);
-      setMessage('Invoice created successfully!');
-      setFormData({
-        invoiceNumber: '',
-        issueDate: '',
-        dueDate: '',
-        amount: '',
-        status: 'PENDING',
-        clientId: ''
-      });
-    } catch (error) {
-      setMessage('Error creating invoice');
-      console.error(error);
-    }
+    axios.post('http://localhost:8080/api/invoices', invoice)
+      .then(() => alert('Invoice created!'))
+      .catch(err => console.error(err));
   };
 
   return (
-    <div>
-      <h2>Create Invoice</h2>
-      {message && <p>{message}</p>}
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="invoiceNumber" placeholder="Invoice Number" value={formData.invoiceNumber} onChange={handleChange} required />
-        <input type="date" name="issueDate" value={formData.issueDate} onChange={handleChange} required />
-        <input type="date" name="dueDate" value={formData.dueDate} onChange={handleChange} required />
-        <input type="number" name="amount" placeholder="Amount" value={formData.amount} onChange={handleChange} required />
-        
-        <select name="status" value={formData.status} onChange={handleChange}>
-          <option value="PENDING">PENDING</option>
-          <option value="PAID">PAID</option>
-          <option value="CANCELLED">CANCELLED</option>
-        </select>
-
-        <select name="clientId" value={formData.clientId} onChange={handleChange} required>
-          <option value="">Select Client</option>
-          {clients.map((client) => (
-            <option key={client.id} value={client.id}>
-              {client.name} ({client.email})
-            </option>
-          ))}
-        </select>
-
-        <button type="submit">Create Invoice</button>
+    <div className="p-6 max-w-md mx-auto">
+      <h2 className="text-xl font-bold mb-4">Add New Invoice</h2>
+      <form onSubmit={handleSubmit} className="space-y-4 bg-white p-4 shadow rounded">
+        <div>
+          <label className="block font-semibold">Invoice Number</label>
+          <input type="text" name="invoiceNumber" onChange={handleChange}
+                 className="w-full border px-3 py-2 rounded" required />
+        </div>
+        <div>
+          <label className="block font-semibold">Amount</label>
+          <input type="number" name="amount" onChange={handleChange}
+                 className="w-full border px-3 py-2 rounded" required />
+        </div>
+        <div>
+          <label className="block font-semibold">Status</label>
+          <select name="status" onChange={handleChange}
+                  className="w-full border px-3 py-2 rounded" required>
+            <option value="">Select</option>
+            <option value="PAID">Paid</option>
+            <option value="PENDING">Pending</option>
+          </select>
+        </div>
+        <div>
+          <label className="block font-semibold">Client ID</label>
+          <input type="number" name="clientId" onChange={handleChange}
+                 className="w-full border px-3 py-2 rounded" required />
+        </div>
+        <button type="submit"
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          Save Invoice
+        </button>
       </form>
     </div>
   );

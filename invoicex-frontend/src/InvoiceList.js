@@ -1,56 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import invoiceService from './InvoiceService';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const InvoiceList = () => {
   const [invoices, setInvoices] = useState([]);
 
-  const fetchInvoices = () => {
-    invoiceService.getAllInvoices()
-      .then(res => setInvoices(res.data))
-      .catch(err => console.error('Failed to fetch invoices:', err));
-  };
-
   useEffect(() => {
-    fetchInvoices();
+    axios.get('http://localhost:8080/api/invoices')
+      .then(response => setInvoices(response.data))
+      .catch(error => console.error(error));
   }, []);
 
-  const handleDelete = (id) => {
-    invoiceService.deleteInvoice(id)
-      .then(() => fetchInvoices())
-      .catch(err => console.error("Delete failed:", err));
-  };
-
   return (
-    <div>
-      <h2>All Invoices</h2>
-      <table border="1" cellPadding="10">
-        <thead>
-          <tr>
-            <th>Invoice #</th>
-            <th>Issue Date</th>
-            <th>Due Date</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Client</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {invoices.map((inv) => (
-            <tr key={inv.id}>
-              <td>{inv.invoiceNumber}</td>
-              <td>{inv.issueDate}</td>
-              <td>{inv.dueDate}</td>
-              <td>{inv.amount}</td>
-              <td>{inv.status}</td>
-              <td>{inv.clientName} ({inv.clientEmail})</td>
-              <td>
-                <button onClick={() => handleDelete(inv.id)}>Delete</button>
-              </td>
+    <div className="p-6">
+      <h2 className="text-2xl font-semibold mb-4">All Invoices</h2>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-200 shadow rounded">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="py-2 px-4 border-b">Invoice #</th>
+              <th className="py-2 px-4 border-b">Amount</th>
+              <th className="py-2 px-4 border-b">Status</th>
+              <th className="py-2 px-4 border-b">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {invoices.map(inv => (
+              <tr key={inv.id} className="hover:bg-gray-50">
+                <td className="py-2 px-4 border-b">{inv.invoiceNumber}</td>
+                <td className="py-2 px-4 border-b">₹{inv.amount}</td>
+                <td className="py-2 px-4 border-b">{inv.status}</td>
+                <td className="py-2 px-4 border-b space-x-2">
+                  <Link to={`/edit/${inv.id}`} className="text-blue-600 hover:underline">Edit</Link>
+                  <button className="text-red-500 hover:underline">Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

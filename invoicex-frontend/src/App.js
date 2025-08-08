@@ -1,20 +1,23 @@
 import React from 'react';
-import InvoiceForm from './InvoiceForm';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from './Navbar';
 import InvoiceList from './InvoiceList';
-import ClientList from './ClientList';
-import AddClient from './AddClient';
+import InvoiceForm from './InvoiceForm';
 
 function App() {
   return (
-    <div className="App">
-      <h1>InvoiceX – Smart Invoice Manager</h1>
-      <InvoiceForm />
-      <hr />
-      <InvoiceList />
-      <hr />
-      <ClientList />
-      <hr /><AddClient/>
-    </div>
+    <BrowserRouter>
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <main className="container mx-auto mt-6 px-4">
+          <Routes>
+            <Route path="/" element={<InvoiceList />} />
+            <Route path="/add" element={<InvoiceForm />} />
+            {/* You can add edit route later if needed */}
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
   );
 }
 
